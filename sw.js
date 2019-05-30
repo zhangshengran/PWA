@@ -4,18 +4,30 @@ self.addEventListener('install',event =>{
         caches.open(cacheName)
         .then(cache =>cache.addAll([
             './js/ttt.js',
-            '/images/test1.jpg'
+            './images/test1.jpg'
         ]))
     )
 })
-self.addEventListener('fetch',function(event){
+self.addEventListener('fetch', function (event) {
     event.respondWith(
-        caches.match(event.request)
-        .then(function(response){
+        caches.match(event.request).then(function(response){
             if(response){
                 return response;
             }
-            return fetch(event.request)
+            var requestToCache = event.request.clone();
+            return fetch(requestToCache).then(
+              function(response){
+                if(!response || response.status !== 200){
+                  return response;
+                }
+                var responseToCache = response.clone();
+                caches.open(CACHE_VERSION)
+                  .then(function(cache){
+                    cache.put(requestToCache, responseToCache);
+                  });
+                return response;
+              }
+            );
         })
-    )
-})
+    );
+});
