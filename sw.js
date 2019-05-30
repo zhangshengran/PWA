@@ -1,7 +1,7 @@
 var cacheName = 'helloWorld';
 self.addEventListener('install',event =>{
     event.waitUntil(
-        cache.open(cacheName)
+        caches.open(cacheName)
         .then(cache =>cache.addAll([
             './js/ttt.js',
             '/images/test1.jpg'
