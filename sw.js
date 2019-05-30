@@ -1,0 +1,21 @@
+var cacheName = 'helloWorld';
+self.addEventListener('install',event =>{
+    event.waitUntil(
+        cache.open(cacheName)
+        .then(cache =>cache.addAll([
+            './js/ttt.js',
+            '/images/test1.jpg'
+        ]))
+    )
+})
+self.addEventListener('fetch',function(event){
+    event.respondWith(
+        caches.match(event.request)
+        .then(function(response){
+            if(response){
+                return response;
+            }
+            return fetch(event.request)
+        })
+    )
+})
