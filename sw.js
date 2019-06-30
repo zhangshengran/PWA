@@ -1,3 +1,6 @@
+
+
+
 var cacheName = 'helloWorld';
 self.addEventListener('install',event =>{
     event.waitUntil(
